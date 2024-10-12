@@ -27,14 +27,15 @@ secret_value = dbutils.widgets.get("secret_value")
 
 # COMMAND ----------
 
-scope_list = []
-for scope in w.secrets.list_scopes():
-    scope_list.append({
-        "name": scope.name,
-        "backend_type": str(scope.backend_type)
-    })
-df_scopes = pd.DataFrame(scope_list)
-display(df_scopes)
+scope_list = [{"name": scope.name, "backend_type": str(scope.backend_type)} 
+              for scope in w.secrets.list_scopes()]
+
+if scope_list:
+    df_scopes = pd.DataFrame(scope_list)
+    display(df_scopes)
+else:
+    print("No secret scopes found.")
+    df_scopes = pd.DataFrame(columns=["name", "backend_type"])
 
 # COMMAND ----------
 
